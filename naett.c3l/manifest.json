@@ -1,0 +1,18 @@
+{
+  "provides" : "naett",
+  "targets" : {
+    "macos-x64" : {
+      "linkflags" : [],
+      "dependencies" : [],
+      "linked-libs" : [ "naett", "Foundation.framework" ]
+    },
+    "linux-x64" : {
+      "linkflags" : [],
+      "dependencies" : [],
+      "linked-libs" : [ "naett", "curl", "pthread" ]
+    },
+	"windows-x64" : {
+		"linked-libs" : [ "naett", "winhttp" ]
+	}
+  }
+}

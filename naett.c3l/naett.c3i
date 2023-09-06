@@ -1,0 +1,51 @@
+// naett.c3i
+// Created 03/09/2023
+// Updated 04/09/2023
+// Binding originally created Kenta @ https://github.com/Its-Kenta
+// All copyrights for Naett goes to erkkah @ https://github.com/erkkah/tigr
+
+module naett;
+
+def InitData = distinct void*;
+def Req = distinct void*;
+def Res = distinct void*;
+def Option = distinct void*;
+
+def Status = distinct int;
+const Status CONNECTION_ERROR = -1;
+const Status PROTOCOL_ERROR = -2;
+const Status READ_ERROR = -3;
+const Status WRITE_ERROR = -4;
+const Status GENERIC_ERROR = -5;
+const Status PROCESSING = 0;
+
+const String NAETT_UA = "Naett/1.0";
+
+def ReaderFunc = fn int(void* dest, int bufferSize, void* userData);
+def WriterFunc = fn int(void* source, int bytes, void* userData);
+def HeaderLister = fn int(char* name, char* value, void* userData);
+
+extern fn void init(InitData initThing) @extern("naettInit");
+extern fn Option* method(ZString method) @extern("naettMethod");
+extern fn Option* header(ZString name, ZString value) @extern("naettHeader");
+extern fn Option* body(ZString body, int size) @extern("naettBody");
+extern fn Option* bodyReader(ReaderFunc reader, void* userData) @extern("naettBodyReader");
+extern fn Option* bodyWriter(WriterFunc writer, void* userData) @extern("naettBodyWriter");
+extern fn Option* timeout(int miliseconds) @extern("naettTimeout");
+extern fn Option* userAgent(char* userAgent) @extern("naettUserAgent");
+extern fn Req* requestWithOptions(char* url, int numOptions, Option** options) @extern("naettRequestWithOptions");
+extern fn Res* make(Req* request) @extern("naettMake");
+extern fn void free(Req* request) @extern("naettFree");
+extern fn int complete(Res* response) @extern("naettComplete");
+extern fn int getStatus(Res* response) @extern("naettGetStatus");
+extern fn void* getBody(Res* response, int* outSize) @extern("naettGetBody");
+extern fn char* getHeader(Res* response, char* name) @extern("naettGetHeader");
+extern fn int getTotalBytesRead(Res* response, int* totalSize) @extern("naettGetTotalBytesRead");
+extern fn void listHeaders(Res* response, HeaderLister lister, void* userData) @extern("naettListHeaders");
+extern fn Req* getRequest(Res* response) @extern("naettGetRequest");
+extern fn void close(Res* response) @extern("naettClose");
+extern fn Req* requestVa(char* url, int numOptions, ...) @extern("naettRequest_va");
+
+macro Req* request(char* url, ...) {
+    return requestVa(url, (int)$vacount, $vasplat());
+}
