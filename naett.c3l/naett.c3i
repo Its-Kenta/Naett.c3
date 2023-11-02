@@ -6,12 +6,12 @@
 
 module naett;
 
-def InitData = distinct void*;
-def Req = distinct void*;
-def Res = distinct void*;
-def Option = distinct void*;
+distinct InitData = void*;
+distinct Req = void*;
+distinct Res = void*;
+distinct Option = void*;
 
-def Status = distinct int;
+distinct Status = int;
 const Status CONNECTION_ERROR = -1;
 const Status PROTOCOL_ERROR = -2;
 const Status READ_ERROR = -3;
